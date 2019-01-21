@@ -1,10 +1,10 @@
 resource "aws_vpc" "website-vpc" {
-  assign_generated_ipv6_cidr_block = "true"
+  assign_generated_ipv6_cidr_block = true
   cidr_block                       = "${var.aws_vpc_cidr_block}"
-  enable_classiclink               = "false"
-  enable_classiclink_dns_support   = "false"
-  enable_dns_hostnames             = "false"
-  enable_dns_support               = "true"
+  enable_classiclink               = false
+  enable_classiclink_dns_support   = false
+  enable_dns_hostnames             = false
+  enable_dns_support               = true
   instance_tenancy                 = "default"
 
   tags = {
@@ -22,7 +22,7 @@ resource "aws_internet_gateway" "website-igw" {
 
 resource "aws_eip" "website-eip-ngw" {
   count = 1
-  vpc   = "true"
+  vpc   = true
 
   tags = {
     Name = "website-eip-ngw"
@@ -32,10 +32,10 @@ resource "aws_eip" "website-eip-ngw" {
 resource "aws_subnet" "website-subnet-public-a" {
   vpc_id = "${aws_vpc.website-vpc.id}"
 
-  assign_ipv6_address_on_creation = "false"
+  assign_ipv6_address_on_creation = false
   availability_zone               = "${element(var.aws_region_azs, 0)}"
   cidr_block                      = "${var.aws_vpc_subnet_cidrs["public-a"]}"
-  map_public_ip_on_launch         = "true"
+  map_public_ip_on_launch         = true
 
   tags = {
     Name = "website-subnet-public-a"
@@ -45,10 +45,10 @@ resource "aws_subnet" "website-subnet-public-a" {
 resource "aws_subnet" "website-subnet-public-b" {
   vpc_id = "${aws_vpc.website-vpc.id}"
 
-  assign_ipv6_address_on_creation = "false"
+  assign_ipv6_address_on_creation = false
   availability_zone               = "${element(var.aws_region_azs, 1)}"
   cidr_block                      = "${var.aws_vpc_subnet_cidrs["public-b"]}"
-  map_public_ip_on_launch         = "true"
+  map_public_ip_on_launch         = true
 
   tags = {
     Name = "website-subnet-public-b"
@@ -58,10 +58,10 @@ resource "aws_subnet" "website-subnet-public-b" {
 resource "aws_subnet" "website-subnet-private-a" {
   vpc_id = "${aws_vpc.website-vpc.id}"
 
-  assign_ipv6_address_on_creation = "false"
+  assign_ipv6_address_on_creation = false
   availability_zone               = "${element(var.aws_region_azs, 0)}"
   cidr_block                      = "${var.aws_vpc_subnet_cidrs["private-a"]}"
-  map_public_ip_on_launch         = "false"
+  map_public_ip_on_launch         = false
 
   tags = {
     Name = "website-subnet-private-a"
@@ -71,10 +71,10 @@ resource "aws_subnet" "website-subnet-private-a" {
 resource "aws_subnet" "website-subnet-private-b" {
   vpc_id = "${aws_vpc.website-vpc.id}"
 
-  assign_ipv6_address_on_creation = "false"
+  assign_ipv6_address_on_creation = false
   availability_zone               = "${element(var.aws_region_azs, 1)}"
   cidr_block                      = "${var.aws_vpc_subnet_cidrs["private-b"]}"
-  map_public_ip_on_launch         = "false"
+  map_public_ip_on_launch         = false
 
   tags = {
     Name = "website-subnet-private-b"

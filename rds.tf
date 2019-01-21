@@ -10,18 +10,18 @@ resource "aws_db_subnet_group" "website-db-subnetgroup" {
 
 resource "aws_db_instance" "website-db-instance" {
   allocated_storage                   = 20
-  auto_minor_version_upgrade          = "true"
+  auto_minor_version_upgrade          = true
   availability_zone                   = "${element(var.aws_region_azs, 0)}"
   backup_retention_period             = "7"
   backup_window                       = "08:58-09:28"
-  copy_tags_to_snapshot               = "true"
+  copy_tags_to_snapshot               = true
   db_subnet_group_name                = "${aws_db_subnet_group.website-db-subnetgroup.name}"
-  deletion_protection                 = "false"
+  deletion_protection                 = false
   domain                              = ""
   domain_iam_role_name                = ""
   engine                              = "mysql"
   engine_version                      = "5.6.40"
-  iam_database_authentication_enabled = "false"
+  iam_database_authentication_enabled = false
   identifier                          = "website-db-instance"
   instance_class                      = "${var.aws_ec2_instance_type["database"]}"
   iops                                = "0"
@@ -29,14 +29,14 @@ resource "aws_db_instance" "website-db-instance" {
   license_model                       = "general-public-license"
   maintenance_window                  = "wed:09:45-wed:10:15"
   monitoring_interval                 = "0"
-  multi_az                            = "false"
+  multi_az                            = false
   name                                = "website_database"
   option_group_name                   = "default:mysql-5-6"
   parameter_group_name                = "default.mysql5.6"
   port                                = "3306"
-  publicly_accessible                 = "false"
-  skip_final_snapshot                 = "true"
-  storage_encrypted                   = "false"
+  publicly_accessible                 = false
+  skip_final_snapshot                 = true
+  storage_encrypted                   = false
   storage_type                        = "gp2"
   timezone                            = ""
 

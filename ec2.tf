@@ -5,17 +5,17 @@ resource "aws_iam_instance_profile" "website-appserver-profile" {
 
 resource "aws_instance" "website-appserver-instance" {
   ami                         = "${var.aws_ec2_instance_ami["webserver"]}"
-  associate_public_ip_address = "false"
+  associate_public_ip_address = false
   availability_zone           = "${element(var.aws_region_azs, 0)}"
-  disable_api_termination     = "false"
-  ebs_optimized               = "false"
-  get_password_data           = "false"
+  disable_api_termination     = false
+  ebs_optimized               = false
+  get_password_data           = false
   iam_instance_profile        = "${aws_iam_instance_profile.website-appserver-profile.name}"
   instance_type               = "${var.aws_ec2_instance_type["webserver"]}"
   key_name                    = "${aws_key_pair.website-ec2-key.key_name}"
-  monitoring                  = "false"
+  monitoring                  = false
   placement_group             = ""
-  source_dest_check           = "true"
+  source_dest_check           = true
   subnet_id                   = "${aws_subnet.website-subnet-private-a.id}"
   tenancy                     = "default"
   user_data                   = "${file("./templates/ec2-userdata.sh")}"
@@ -40,10 +40,10 @@ resource "aws_lb_target_group_attachment" "website-appserver-instance-tg" {
 }
 
 resource "aws_lb" "website-alb" {
-  name               = "website-alb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = ["${aws_security_group.website-sg-alb.id}"]
+  name                       = "website-alb"
+  internal                   = false
+  load_balancer_type         = "application"
+  security_groups            = ["${aws_security_group.website-sg-alb.id}"]
   enable_deletion_protection = false
 
   subnets = [
@@ -51,7 +51,7 @@ resource "aws_lb" "website-alb" {
     "${aws_subnet.website-subnet-public-b.id}",
   ]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   tags = {
     Name = "website-alb"
@@ -78,7 +78,7 @@ resource "aws_lb_listener" "front_end" {
   }
 }
 
-resource "aws_launch_template" "website-appserver-lc" {
+resource "aws_launch_template" "website-appserver-lt" {
   name_prefix   = "website-appserver"
   image_id      = "${var.aws_ec2_instance_ami["webserver"]}"
   instance_type = "${var.aws_ec2_instance_type["webserver"]}"
@@ -99,7 +99,7 @@ resource "aws_autoscaling_group" "website-appserver-asg" {
   ]
 
   launch_template = {
-    id      = "${aws_launch_template.website-appserver-lc.id}"
+    id      = "${aws_launch_template.website-appserver-lt.id}"
     version = "$$Latest"
   }
 }
