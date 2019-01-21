@@ -16,7 +16,7 @@ resource "aws_db_instance" "website-db-instance" {
   backup_window                       = "08:58-09:28"
   copy_tags_to_snapshot               = "true"
   db_subnet_group_name                = "${aws_db_subnet_group.website-db-subnetgroup.name}"
-  deletion_protection                 = "true"
+  deletion_protection                 = "false"
   domain                              = ""
   domain_iam_role_name                = ""
   engine                              = "mysql"

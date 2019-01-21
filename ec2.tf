@@ -44,6 +44,7 @@ resource "aws_lb" "website-alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = ["${aws_security_group.website-sg-alb.id}"]
+  enable_deletion_protection = false
 
   subnets = [
     "${aws_subnet.website-subnet-public-a.id}",
