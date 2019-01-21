@@ -82,6 +82,10 @@ resource "aws_launch_template" "website-appserver-lt" {
   name_prefix   = "website-appserver"
   image_id      = "${var.aws_ec2_instance_ami["webserver"]}"
   instance_type = "${var.aws_ec2_instance_type["webserver"]}"
+  
+  iam_instance_profile {
+    name = "${aws_iam_instance_profile.website-appserver-profile.name}"
+  }
 }
 
 resource "aws_autoscaling_group" "website-appserver-asg" {
@@ -93,7 +97,7 @@ resource "aws_autoscaling_group" "website-appserver-asg" {
   desired_capacity = 0
   max_size         = 0
   min_size         = 0
-
+  
   target_group_arns = [
     "${aws_lb_target_group.website-alb-tg.arn}",
   ]
