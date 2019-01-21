@@ -33,12 +33,6 @@ resource "aws_instance" "website-appserver-instance" {
   }
 }
 
-resource "aws_lb_target_group_attachment" "website-appserver-instance-tg" {
-  target_group_arn = "${aws_lb_target_group.website-alb-tg.arn}"
-  target_id        = "${aws_instance.website-appserver-instance.id}"
-  port             = 80
-}
-
 resource "aws_lb" "website-alb" {
   name                       = "website-alb"
   internal                   = false
@@ -86,6 +80,8 @@ resource "aws_launch_template" "website-appserver-lt" {
   iam_instance_profile {
     name = "${aws_iam_instance_profile.website-appserver-profile.name}"
   }
+  
+  user_data = "${base64encode(file("./templates/ec2-userdata.sh"))}"
 }
 
 resource "aws_autoscaling_group" "website-appserver-asg" {
