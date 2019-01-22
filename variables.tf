@@ -40,7 +40,7 @@ variable "aws_vpc_subnet_cidrs" {
 
 variable "aws_ec2_instance_ami" {
   default = {
-    "webserver" = "ami-0799ad445b5727125"
+    "webserver" = "ami-032509850cf9ee54e"
   }
 }
 
