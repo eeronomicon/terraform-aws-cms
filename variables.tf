@@ -1,11 +1,11 @@
 variable "aws_region" {
-  default = "us-west-1"
+  default = "us-west-2"
 }
 
 variable "aws_region_azs" {
   default = [
-    "us-west-1a",
-    "us-west-1c",
+    "us-west-2a",
+    "us-west-2b",
   ]
 }
 
@@ -22,7 +22,7 @@ variable "aws_acm_cert_domain" {
 }
 
 variable "aws_ec2_keypair_name" {
-  default = "freeformportland-uswest-1"
+  default = "freeformportland-uswest-2"
 }
 
 variable "aws_vpc_cidr_block" {
