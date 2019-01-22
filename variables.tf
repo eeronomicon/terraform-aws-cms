@@ -5,7 +5,7 @@ variable "aws_region" {
 variable "aws_region_azs" {
   default = [
     "us-west-1a",
-    "us-west-1b",
+    "us-west-1c",
   ]
 }
 

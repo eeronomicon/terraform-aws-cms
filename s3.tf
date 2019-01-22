@@ -13,7 +13,12 @@ resource "aws_vpc_endpoint" "website-vpcendpoint-s3" {
   service_name = "com.amazonaws.${var.aws_region}.s3"
 }
 
-resource "aws_vpc_endpoint_route_table_association" "website-vpcendpointroute-s3" {
-  route_table_id  = "${aws_route_table.website-route-private.id}"
+resource "aws_vpc_endpoint_route_table_association" "website-vpcendpointroute-s3-a" {
+  route_table_id  = "${aws_route_table.website-route-private-a.id}"
+  vpc_endpoint_id = "${aws_vpc_endpoint.website-vpcendpoint-s3.id}"
+}
+
+resource "aws_vpc_endpoint_route_table_association" "website-vpcendpointroute-s3-b" {
+  route_table_id  = "${aws_route_table.website-route-private-b.id}"
   vpc_endpoint_id = "${aws_vpc_endpoint.website-vpcendpoint-s3.id}"
 }

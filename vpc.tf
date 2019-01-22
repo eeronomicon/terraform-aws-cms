@@ -20,15 +20,6 @@ resource "aws_internet_gateway" "website-igw" {
   }
 }
 
-resource "aws_eip" "website-eip-ngw" {
-  count = 1
-  vpc   = true
-
-  tags = {
-    Name = "website-eip-ngw"
-  }
-}
-
 resource "aws_subnet" "website-subnet-public-a" {
   vpc_id = "${aws_vpc.website-vpc.id}"
 
@@ -81,12 +72,39 @@ resource "aws_subnet" "website-subnet-private-b" {
   }
 }
 
-resource "aws_nat_gateway" "website-ngw" {
-  subnet_id     = "${aws_subnet.website-subnet-public-a.id}"
-  allocation_id = "${aws_eip.website-eip-ngw.id}"
+resource "aws_eip" "website-eip-ngw-a" {
+  count = 1
+  vpc   = true
 
   tags = {
-    Name = "website-ngw"
+    Name = "website-eip-ngw-a"
+  }
+}
+
+resource "aws_eip" "website-eip-ngw-b" {
+  count = 1
+  vpc   = true
+
+  tags = {
+    Name = "website-eip-ngw-b"
+  }
+}
+
+resource "aws_nat_gateway" "website-ngw-a" {
+  subnet_id     = "${aws_subnet.website-subnet-public-a.id}"
+  allocation_id = "${aws_eip.website-eip-ngw-a.id}"
+
+  tags = {
+    Name = "website-ngw-a"
+  }
+}
+
+resource "aws_nat_gateway" "website-ngw-b" {
+  subnet_id     = "${aws_subnet.website-subnet-public-b.id}"
+  allocation_id = "${aws_eip.website-eip-ngw-b.id}"
+
+  tags = {
+    Name = "website-ngw-b"
   }
 }
 
@@ -103,12 +121,25 @@ resource "aws_route_table" "website-route-public" {
   }
 }
 
-resource "aws_route_table" "website-route-private" {
+resource "aws_route_table" "website-route-private-a" {
   vpc_id = "${aws_vpc.website-vpc.id}"
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = "${aws_nat_gateway.website-ngw.id}"
+    nat_gateway_id = "${aws_nat_gateway.website-ngw-a.id}"
+  }
+
+  tags = {
+    Name = "website-route-private"
+  }
+}
+
+resource "aws_route_table" "website-route-private-b" {
+  vpc_id = "${aws_vpc.website-vpc.id}"
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = "${aws_nat_gateway.website-ngw-b.id}"
   }
 
   tags = {
@@ -118,12 +149,12 @@ resource "aws_route_table" "website-route-private" {
 
 resource "aws_route_table_association" "website-subnet-private-a" {
   subnet_id      = "${aws_subnet.website-subnet-private-a.id}"
-  route_table_id = "${aws_route_table.website-route-private.id}"
+  route_table_id = "${aws_route_table.website-route-private-a.id}"
 }
 
 resource "aws_route_table_association" "website-subnet-private-b" {
   subnet_id      = "${aws_subnet.website-subnet-private-b.id}"
-  route_table_id = "${aws_route_table.website-route-private.id}"
+  route_table_id = "${aws_route_table.website-route-private-b.id}"
 }
 
 resource "aws_route_table_association" "website-subnet-public-a" {
