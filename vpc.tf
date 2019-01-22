@@ -186,6 +186,13 @@ resource "aws_security_group" "website-sg-alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = {
     Name = "website-sg-alb"
   }
@@ -203,6 +210,13 @@ resource "aws_security_group" "website-sg-appserver" {
     security_groups = ["${aws_security_group.website-sg-alb.id}"]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = {
     Name = "website-sg-appserver"
   }
@@ -218,6 +232,13 @@ resource "aws_security_group" "website-sg-db" {
     to_port         = 3306
     protocol        = "tcp"
     security_groups = ["${aws_security_group.website-sg-appserver.id}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
